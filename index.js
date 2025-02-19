@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer-core");
 const path = require("path");
 const { execSync } = require("child_process");
+const http = require("http");
 
 function getChromeExecutable() {
   // If CHROME_PATH is set, try that first.
@@ -13,7 +14,7 @@ function getChromeExecutable() {
       console.error(`CHROME_PATH is set to ${process.env.CHROME_PATH} but is not executable.`);
     }
   }
-  // List of common paths to check.
+  // Check common paths.
   const possiblePaths = [
     "/usr/bin/chromium-browser",
     "/usr/bin/chromium",
@@ -26,11 +27,11 @@ function getChromeExecutable() {
       console.log(`Found executable at ${p}`);
       return p;
     } catch (err) {
-      // Not found, continue to next.
+      // Not executable; continue.
     }
   }
 
-  // Fallback: try using the 'which' command.
+  // Fallback: use the 'which' command.
   const commands = ["chromium-browser", "chromium", "google-chrome"];
   for (const cmd of commands) {
     try {
@@ -60,13 +61,22 @@ function getChromeExecutable() {
   });
 
   const page = await browser.newPage();
-  
-  // Build the file URL for your local HTML file.
+
+  // Construct the file URL for your local HTML file.
   const filePath = path.join("file://", __dirname, "public", "index.html");
   console.log("Navigating to:", filePath);
 
   await page.goto(filePath, { waitUntil: "networkidle2" });
   console.log("Mining page loaded and running.");
 
-  // Keep the process alive as needed.
+  // You may add additional logic here if needed.
 })();
+
+// Start a minimal HTTP server to satisfy Render's port binding requirement.
+const port = process.env.PORT || 3000;
+http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Mining is running.\n");
+}).listen(port, "0.0.0.0", () => {
+  console.log(`Server is listening on port ${port}`);
+});
