@@ -4,7 +4,8 @@
   "description": "A continuously running headless browser that loads coin mining code.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "check-chrome": "node check-chrome.js"
   },
   "dependencies": {
     "puppeteer-core": "^20.0.0"
